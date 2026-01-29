@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  privacy:
+    image: ghcr.io/infodev2025/privacy-policy:latest
+    networks:
+      - MsNet
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.privacy.rule=Host(`privacidad.msconsultoria.cloud`)"
+        - "traefik.http.routers.privacy.entrypoints=websecure"
+        - "traefik.http.routers.privacy.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.privacy.loadbalancer.server.port=80"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+networks:
+  MsNet:
+    external: true
